@@ -1203,6 +1203,12 @@ const ProductManagement = () => {
   
   // Package points
   const [packagePoints, setPackagePoints] = useState([]);
+  
+  // Key Features
+  const [keyFeatures, setKeyFeatures] = useState([]);
+  
+  // Applications
+  const [applications, setApplications] = useState([]);
 
   const [productFormData, setProductFormData] = useState({
     name: '',
@@ -1237,7 +1243,9 @@ const ProductManagement = () => {
     active: true,
     imageUrl: '',
     customSpecifications: [],
-    packagePoints: []
+    packagePoints: [],
+    keyFeatures: [],
+    applications: []
   });
 
   const [categoryFormData, setCategoryFormData] = useState({
@@ -1246,7 +1254,9 @@ const ProductManagement = () => {
     active: true,
     imageUrl: '',
     customSpecifications: [],
-    packagePoints: []
+    packagePoints: [],
+    keyFeatures: [],
+    applications: []
   });
 
   const [categoryItemFormData, setCategoryItemFormData] = useState({
@@ -1282,7 +1292,9 @@ const ProductManagement = () => {
     active: true,
     imageUrl: '',
     customSpecifications: [],
-    packagePoints: []
+    packagePoints: [],
+    keyFeatures: [],
+    applications: []
   });
 
   useEffect(() => {
@@ -1347,11 +1359,15 @@ const ProductManagement = () => {
             });
             setCustomSpecifications(itemData.customSpecifications || []);
             setPackagePoints(itemData.packagePoints || []);
+            setKeyFeatures(itemData.keyFeatures || []);
+            setApplications(itemData.applications || []);
             break;
           case 'categories':
             setCategoryFormData(itemData);
             setCustomSpecifications(itemData.customSpecifications || []);
             setPackagePoints(itemData.packagePoints || []);
+            setKeyFeatures(itemData.keyFeatures || []);
+            setApplications(itemData.applications || []);
             break;
           case 'categoryItems':
             setCategoryItemFormData({
@@ -1360,6 +1376,8 @@ const ProductManagement = () => {
             });
             setCustomSpecifications(itemData.customSpecifications || []);
             setPackagePoints(itemData.packagePoints || []);
+            setKeyFeatures(itemData.keyFeatures || []);
+            setApplications(itemData.applications || []);
             break;
         }
         setImagePreview(itemData.imageUrl);
@@ -1448,6 +1466,40 @@ const ProductManagement = () => {
     setPackagePoints(updatedPoints);
   };
 
+  // Handle key features
+  const addKeyFeature = () => {
+    setKeyFeatures([...keyFeatures, '']);
+  };
+
+  const removeKeyFeature = (index) => {
+    const updatedFeatures = [...keyFeatures];
+    updatedFeatures.splice(index, 1);
+    setKeyFeatures(updatedFeatures);
+  };
+
+  const handleKeyFeatureChange = (index, value) => {
+    const updatedFeatures = [...keyFeatures];
+    updatedFeatures[index] = value;
+    setKeyFeatures(updatedFeatures);
+  };
+
+  // Handle applications
+  const addApplication = () => {
+    setApplications([...applications, '']);
+  };
+
+  const removeApplication = (index) => {
+    const updatedApplications = [...applications];
+    updatedApplications.splice(index, 1);
+    setApplications(updatedApplications);
+  };
+
+  const handleApplicationChange = (index, value) => {
+    const updatedApplications = [...applications];
+    updatedApplications[index] = value;
+    setApplications(updatedApplications);
+  };
+
   const handleProductInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     
@@ -1530,6 +1582,21 @@ const ProductManagement = () => {
     }));
   };
 
+  // Clear individual specification field
+  const clearField = (fieldName, formType = 'product') => {
+    switch(formType) {
+      case 'product':
+        setProductFormData(prev => ({ ...prev, [fieldName]: '' }));
+        break;
+      case 'category':
+        setCategoryFormData(prev => ({ ...prev, [fieldName]: '' }));
+        break;
+      case 'categoryItem':
+        setCategoryItemFormData(prev => ({ ...prev, [fieldName]: '' }));
+        break;
+    }
+  };
+
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -1589,6 +1656,8 @@ const ProductManagement = () => {
         imageUrl: imageUrl || productFormData.imageUrl,
         customSpecifications: customSpecifications.filter(spec => spec.title.trim() !== '' && spec.value.trim() !== ''),
         packagePoints: packagePoints.filter(point => point.trim() !== ''),
+        keyFeatures: keyFeatures.filter(feature => feature.trim() !== ''),
+        applications: applications.filter(app => app.trim() !== ''),
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp()
       };
@@ -1621,6 +1690,8 @@ const ProductManagement = () => {
         imageUrl: imageUrl || productFormData.imageUrl,
         customSpecifications: customSpecifications.filter(spec => spec.title.trim() !== '' && spec.value.trim() !== ''),
         packagePoints: packagePoints.filter(point => point.trim() !== ''),
+        keyFeatures: keyFeatures.filter(feature => feature.trim() !== ''),
+        applications: applications.filter(app => app.trim() !== ''),
         updatedAt: serverTimestamp()
       };
       await updateDoc(doc(db, 'products', currentItemId), productData);
@@ -1643,6 +1714,8 @@ const ProductManagement = () => {
         imageUrl: imageUrl || categoryFormData.imageUrl,
         customSpecifications: customSpecifications.filter(spec => spec.title.trim() !== '' && spec.value.trim() !== ''),
         packagePoints: packagePoints.filter(point => point.trim() !== ''),
+        keyFeatures: keyFeatures.filter(feature => feature.trim() !== ''),
+        applications: applications.filter(app => app.trim() !== ''),
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp()
       };
@@ -1670,6 +1743,8 @@ const ProductManagement = () => {
         imageUrl: imageUrl || categoryFormData.imageUrl,
         customSpecifications: customSpecifications.filter(spec => spec.title.trim() !== '' && spec.value.trim() !== ''),
         packagePoints: packagePoints.filter(point => point.trim() !== ''),
+        keyFeatures: keyFeatures.filter(feature => feature.trim() !== ''),
+        applications: applications.filter(app => app.trim() !== ''),
         updatedAt: serverTimestamp()
       };
       const categoryRef = doc(db, 'categories', currentItemId);
@@ -1702,6 +1777,8 @@ const ProductManagement = () => {
         imageUrl: imageUrl || categoryItemFormData.imageUrl,
         customSpecifications: customSpecifications.filter(spec => spec.title.trim() !== '' && spec.value.trim() !== ''),
         packagePoints: packagePoints.filter(point => point.trim() !== ''),
+        keyFeatures: keyFeatures.filter(feature => feature.trim() !== ''),
+        applications: applications.filter(app => app.trim() !== ''),
         createdAt: serverTimestamp(),
         updatedAt: serverTimestamp()
       };
@@ -1733,6 +1810,8 @@ const ProductManagement = () => {
         imageUrl: imageUrl || categoryItemFormData.imageUrl,
         customSpecifications: customSpecifications.filter(spec => spec.title.trim() !== '' && spec.value.trim() !== ''),
         packagePoints: packagePoints.filter(point => point.trim() !== ''),
+        keyFeatures: keyFeatures.filter(feature => feature.trim() !== ''),
+        applications: applications.filter(app => app.trim() !== ''),
         updatedAt: serverTimestamp()
       };
       await updateDoc(doc(db, 'categoryItems', currentItemId), categoryItemData);
@@ -1815,6 +1894,8 @@ const ProductManagement = () => {
     setUploadProgress(0);
     setCustomSpecifications([]);
     setPackagePoints([]);
+    setKeyFeatures([]);
+    setApplications([]);
     setProductFormData({
       name: '',
       price: '',
@@ -1858,6 +1939,8 @@ const ProductManagement = () => {
     setUploadProgress(0);
     setCustomSpecifications([]);
     setPackagePoints([]);
+    setKeyFeatures([]);
+    setApplications([]);
     setCategoryFormData({
       name: '',
       description: '',
@@ -1874,6 +1957,8 @@ const ProductManagement = () => {
     setUploadProgress(0);
     setCustomSpecifications([]);
     setPackagePoints([]);
+    setKeyFeatures([]);
+    setApplications([]);
     setCategoryItemFormData({
       categoryId: '',
       categoryName: '',
@@ -2019,6 +2104,80 @@ const ProductManagement = () => {
     </div>
   );
 
+  // Key Features UI
+  const renderKeyFeaturesUI = () => (
+    <div className="form-section">
+      <div className="section-header">
+        <h3>Key Features</h3>
+        <button type="button" className="add-btn" onClick={addKeyFeature}>
+          <i className="fas fa-plus"></i> Add Key Feature
+        </button>
+      </div>
+      {keyFeatures.map((feature, index) => (
+        <div className="package-point-row" key={index}>
+          <div className="form-row">
+            <div className="form-group bullet-input">
+              <i className="fas fa-star bullet-icon"></i>
+              <input 
+                type="text" 
+                placeholder="Key feature description" 
+                value={feature} 
+                onChange={(e) => handleKeyFeatureChange(index, e.target.value)}
+              />
+            </div>
+            <button 
+              type="button" 
+              className="remove-btn" 
+              onClick={() => removeKeyFeature(index)}
+            >
+              <i className="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+      ))}
+      {keyFeatures.length === 0 && (
+        <p className="no-items-text">No key features added yet</p>
+      )}
+    </div>
+  );
+
+  // Applications UI
+  const renderApplicationsUI = () => (
+    <div className="form-section">
+      <div className="section-header">
+        <h3>Applications</h3>
+        <button type="button" className="add-btn" onClick={addApplication}>
+          <i className="fas fa-plus"></i> Add Application
+        </button>
+      </div>
+      {applications.map((application, index) => (
+        <div className="package-point-row" key={index}>
+          <div className="form-row">
+            <div className="form-group bullet-input">
+              <i className="fas fa-lightbulb bullet-icon"></i>
+              <input 
+                type="text" 
+                placeholder="Application description" 
+                value={application} 
+                onChange={(e) => handleApplicationChange(index, e.target.value)}
+              />
+            </div>
+            <button 
+              type="button" 
+              className="remove-btn" 
+              onClick={() => removeApplication(index)}
+            >
+              <i className="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+      ))}
+      {applications.length === 0 && (
+        <p className="no-items-text">No applications added yet</p>
+      )}
+    </div>
+  );
+
   return (
     <div className="content">
       <h1 className="page-title">Create Items</h1>
@@ -2101,11 +2260,23 @@ const ProductManagement = () => {
               <h3>Specifications</h3>
               <div className="form-row">
                 <div className="form-group half">
-                  <label>Microcontroller</label>
+                  <label>Microcontroller
+                    {productFormData.microcontroller && (
+                      <button type="button" className="clear-field-btn" onClick={() => clearField('microcontroller', 'product')} title="Clear field">
+                        <i className="fas fa-times"></i>
+                      </button>
+                    )}
+                  </label>
                   <input type="text" name="microcontroller" value={productFormData.microcontroller} onChange={handleProductInputChange} placeholder="ATmega328P" />
                 </div>
                 <div className="form-group half">
-                  <label>Operating Voltage</label>
+                  <label>Operating Voltage
+                    {productFormData.operatingVoltage && (
+                      <button type="button" className="clear-field-btn" onClick={() => clearField('operatingVoltage', 'product')} title="Clear field">
+                        <i className="fas fa-times"></i>
+                      </button>
+                    )}
+                  </label>
                   <input type="text" name="operatingVoltage" value={productFormData.operatingVoltage} onChange={handleProductInputChange} placeholder="5V" />
                 </div>
               </div>
@@ -2197,6 +2368,12 @@ const ProductManagement = () => {
             {/* Package Points */}
             {renderPackagePointsUI()}
 
+            {/* Key Features */}
+            {renderKeyFeaturesUI()}
+
+            {/* Applications */}
+            {renderApplicationsUI()}
+
             <div className="form-section">
               <h3>Product Image</h3>
               <div className="form-group">
@@ -2243,7 +2420,9 @@ const ProductManagement = () => {
           {formMode === 'edit' && <SpecificationComponent itemData={{
             ...productFormData, 
             customSpecifications, 
-            packagePoints
+            packagePoints,
+            keyFeatures,
+            applications
           }} itemType="trending" />}
         </div>
       )}
@@ -2276,6 +2455,12 @@ const ProductManagement = () => {
             {/* Package Points */}
             {renderPackagePointsUI()}
 
+            {/* Key Features */}
+            {renderKeyFeaturesUI()}
+
+            {/* Applications */}
+            {renderApplicationsUI()}
+
             <div className="form-section">
               <h3>Category Image</h3>
               <div className="form-group">
@@ -2293,7 +2478,9 @@ const ProductManagement = () => {
           {formMode === 'edit' && <SpecificationComponent itemData={{
             ...categoryFormData, 
             customSpecifications, 
-            packagePoints
+            packagePoints,
+            keyFeatures,
+            applications
           }} itemType="categories" />}
         </div>
       )}
@@ -2490,6 +2677,12 @@ const ProductManagement = () => {
             {/* Package Points */}
             {renderPackagePointsUI()}
 
+            {/* Key Features */}
+            {renderKeyFeaturesUI()}
+
+            {/* Applications */}
+            {renderApplicationsUI()}
+
             <div className="form-section">
               <h3>Display Options</h3>
               <div className="form-group">
@@ -2518,7 +2711,9 @@ const ProductManagement = () => {
           {formMode === 'edit' && <SpecificationComponent itemData={{
             ...categoryItemFormData, 
             customSpecifications, 
-            packagePoints
+            packagePoints,
+            keyFeatures,
+            applications
           }} itemType="categoryItems" />}
         </div>
       )}
