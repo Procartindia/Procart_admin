@@ -1500,6 +1500,47 @@ const ProductManagement = () => {
     setApplications(updatedApplications);
   };
 
+  // Parse bulk text into individual items
+  const parseBulkText = (text) => {
+    if (!text) return [];
+    
+    // Split by newlines
+    const lines = text.split('\n');
+    
+    // Process each line
+    const items = lines
+      .map(line => {
+        // Remove common bullet points and trim
+        return line
+          .replace(/^[•●\-\*]\s*/, '') // Remove bullet points
+          .replace(/^\d+\.\s*/, '')    // Remove numbered lists
+          .trim();
+      })
+      .filter(line => line.length > 0); // Remove empty lines
+    
+    return items;
+  };
+
+  // Handle bulk paste for key features
+  const handleKeyFeaturesBulkPaste = (e) => {
+    const text = e.target.value;
+    const items = parseBulkText(text);
+    if (items.length > 0) {
+      setKeyFeatures(items);
+      e.target.value = ''; // Clear textarea
+    }
+  };
+
+  // Handle bulk paste for applications
+  const handleApplicationsBulkPaste = (e) => {
+    const text = e.target.value;
+    const items = parseBulkText(text);
+    if (items.length > 0) {
+      setApplications(items);
+      e.target.value = ''; // Clear textarea
+    }
+  };
+
   const handleProductInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     
@@ -1882,6 +1923,8 @@ const ProductManagement = () => {
     }
     setCustomSpecifications(item.customSpecifications || []);
     setPackagePoints(item.packagePoints || []);
+    setKeyFeatures(item.keyFeatures || []);
+    setApplications(item.applications || []);
     setImagePreview(item.imageUrl);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -2113,6 +2156,20 @@ const ProductManagement = () => {
           <i className="fas fa-plus"></i> Add Key Feature
         </button>
       </div>
+      
+      {/* Bulk paste textarea */}
+      <div className="form-group">
+        <label className="bulk-paste-label">
+          <i className="fas fa-paste"></i> Bulk Paste (paste multiple features, each on a new line)
+        </label>
+        <textarea 
+          className="bulk-paste-textarea"
+          placeholder="Paste multiple features here (with or without bullet points)...&#10;• Feature 1&#10;• Feature 2&#10;• Feature 3"
+          rows="4"
+          onBlur={handleKeyFeaturesBulkPaste}
+        />
+      </div>
+
       {keyFeatures.map((feature, index) => (
         <div className="package-point-row" key={index}>
           <div className="form-row">
@@ -2150,6 +2207,20 @@ const ProductManagement = () => {
           <i className="fas fa-plus"></i> Add Application
         </button>
       </div>
+      
+      {/* Bulk paste textarea */}
+      <div className="form-group">
+        <label className="bulk-paste-label">
+          <i className="fas fa-paste"></i> Bulk Paste (paste multiple applications, each on a new line)
+        </label>
+        <textarea 
+          className="bulk-paste-textarea"
+          placeholder="Paste multiple applications here (with or without bullet points)...&#10;• Application 1&#10;• Application 2&#10;• Application 3"
+          rows="4"
+          onBlur={handleApplicationsBulkPaste}
+        />
+      </div>
+
       {applications.map((application, index) => (
         <div className="package-point-row" key={index}>
           <div className="form-row">
