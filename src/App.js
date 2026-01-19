@@ -273,6 +273,7 @@ import LiveHackathonsManagement from './components/DesignHouseManagement/LiveHac
 import FeaturedProductsManagement from './components/DesignHouseManagement/FeaturedProductsManagement';
 import TestimonialsManagement from './components/DesignHouseManagement/TestimonialsManagement';
 import ProjectShowcaseManagement from './components/DesignHouseManagement/ProjectShowcaseManagement';
+import ElectronicsLabKitManagement from './components/ElectronicsLabKit/ElectronicsLabKitManagement';
 
 // CSS
 import './App.css';
@@ -292,7 +293,7 @@ function App() {
       if (location.pathname === '/dashboard') {
         setMode('default');
       } else if (
-        ['/model-banner', '/manage-modals', '/live-hackathons', '/featured-products', '/testimonials', '/project-showcase'].includes(location.pathname)
+        ['/model-banner', '/manage-modals', '/live-hackathons', '/featured-products', '/testimonials', '/project-showcase', '/electronics-lab-kit'].includes(location.pathname)
       ) {
         setMode('designHouse');
       } else if (
@@ -493,6 +494,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <ProjectShowcaseManagement />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/electronics-lab-kit" 
+                element={
+                  <ProtectedRoute>
+                    <ElectronicsLabKitManagement />
                   </ProtectedRoute>
                 } 
               />

@@ -141,6 +141,7 @@ function Sidebar({ isOpen, closeSidebar, mode = 'default' }) {
       { path: '/manage-modals', icon: 'fas fa-window-restore', label: 'Create Modals' },
       { path: '/live-hackathons', icon: 'fas fa-laptop-code', label: 'Create Live Hackathons' },
       { path: '/featured-products', icon: 'fas fa-star', label: 'Featured Products' },
+      { path: '/electronics-lab-kit', icon: 'fas fa-microchip', label: 'Electronics Lab Kit' },
    
     ];
     
